@@ -13,5 +13,21 @@
     "Artifacting",
     "Drive not detected",
     "Windows install issue"
+  ],
+  "troubleshooting_steps": [
+    "Reseated RAM",
+    "Tested one stick",
+    "Reseated GPU",
+    "Removed riser",
+    "Updated drivers",
+    "Checked temps",
+    "Swapped drive",
+    "Reinstalled Windows",
+    "Cleared CMOS",
+    "Tested another GPU",
+    "Tested another RAM kit",
+    "Updated chipset drivers",
+    "Checked power connections",
+    "Tested outside the case"
   ]
 }
