@@ -10,76 +10,96 @@
   <header class="site-header">
     <div>
       <h1>PC Diagnostic Tool</h1>
-      <p class="subtitle">Internal symptom checker with quick troubleshooting suggestions</p>
+      <p class="subtitle">Quick symptom-based suggestion helper</p>
     </div>
     <div class="header-actions">
-      <button id="loadSampleBtn" class="secondary">Load Sample</button>
-      <button id="resetBtn" class="secondary">Clear</button>
+      <button id="loadSampleBtn" class="secondary" type="button">Load Sample</button>
+      <button id="resetBtn" class="secondary" type="button">Clear Form</button>
     </div>
   </header>
 
   <main class="layout">
     <section class="panel panel-wide">
       <div class="panel-title-row">
-        <h2>System Details</h2>
-        <span class="status-badge">Suggestion Mode</span>
+        <h2>System Information</h2>
       </div>
 
       <form id="diagnosticForm">
         <div class="form-grid">
-          <div class="form-group">
+          <div class="form-group form-group-span-2">
             <label for="motherboardSelect">Motherboard</label>
-            <select id="motherboardSelect" name="motherboardSelect"></select>
-            <input id="motherboardCustom" name="motherboardCustom" type="text" class="hidden" placeholder="Enter motherboard manually" />
-            <p class="field-hint">Uses your BIOS tracker board list. Choose Custom if needed.</p>
+            <select id="motherboardSelect" name="motherboard"></select>
+            <input id="motherboardCustom" name="motherboardCustom" class="hidden top-gap" type="text" placeholder="Type motherboard model" disabled />
           </div>
+
           <div class="form-group">
-            <label for="cpuSelect">CPU Tier</label>
-            <select id="cpuSelect" name="cpuSelect">
-              <option value="">Select CPU Tier</option>
+            <label for="cpuTier">CPU Tier</label>
+            <select id="cpuTier" name="cpuTier">
+              <option value="">Select CPU tier</option>
               <option value="Low">Low</option>
               <option value="Mid">Mid</option>
               <option value="High">High</option>
             </select>
           </div>
+
           <div class="form-group">
             <label for="cooler">Cooler</label>
-            <input id="cooler" name="cooler" type="text" placeholder="360mm AIO" />
+            <select id="cooler" name="cooler">
+              <option value="">Select cooler</option>
+              <option value="Stock CPU Cooler">Stock CPU Cooler</option>
+              <option value="CPU Tower Cooler">CPU Tower Cooler</option>
+              <option value="240mm AIO">240mm AIO</option>
+              <option value="360mm AIO">360mm AIO</option>
+              <option value="Custom Watercool">Custom Watercool</option>
+            </select>
           </div>
+
           <div class="form-group">
-            <label for="ramTotalGb">RAM Total (GB)</label>
-            <input id="ramTotalGb" name="ramTotalGb" type="number" min="0" placeholder="32" />
+            <label for="ramEachStickGb">RAM Each Stick (GB)</label>
+            <input id="ramEachStickGb" name="ramEachStickGb" type="number" min="0" step="1" placeholder="16" />
           </div>
+
           <div class="form-group">
             <label for="ramModules">RAM Sticks</label>
             <select id="ramModules" name="ramModules">
-              <option value="">Select RAM Sticks</option>
+              <option value="">Select stick count</option>
               <option value="2">2</option>
               <option value="4">4</option>
             </select>
           </div>
+
           <div class="form-group">
-            <label for="gpuPresent">GPU Installed</label>
-            <select id="gpuPresent" name="gpuPresent">
+            <label for="gpuInstalled">GPU Installed</label>
+            <select id="gpuInstalled" name="gpuInstalled">
+              <option value="">Select option</option>
               <option value="true">Yes</option>
               <option value="false">No</option>
             </select>
           </div>
+
           <div class="form-group">
-            <label for="gpuModel">GPU Model</label>
-            <input id="gpuModel" name="gpuModel" type="text" placeholder="RTX 4080 Super" />
+            <label for="gpuTier">GPU Tier</label>
+            <select id="gpuTier" name="gpuTier">
+              <option value="">Select GPU tier</option>
+              <option value="Low">Low</option>
+              <option value="Mid">Mid</option>
+              <option value="High">High</option>
+            </select>
           </div>
+
           <div class="form-group">
             <label for="riserCable">Using Riser Cable</label>
             <select id="riserCable" name="riserCable">
+              <option value="">Select option</option>
               <option value="false">No</option>
               <option value="true">Yes</option>
             </select>
           </div>
-          <div class="form-group form-group-span-2">
+
+          <div class="form-group">
             <label for="storage">Storage</label>
             <select id="storage" name="storage">
-              <option value="">Select Storage Generation</option>
+              <option value="">Select storage type</option>
               <option value="Gen 4">Gen 4</option>
               <option value="Gen 5">Gen 5</option>
             </select>
@@ -88,20 +108,20 @@
 
         <h3>Symptoms</h3>
         <div id="symptomChecklist" class="checklist-grid"></div>
-</form>
+      </form>
     </section>
 
     <aside class="panel">
       <h2>Suggestions</h2>
-      <div id="suggestionsEmpty" class="muted-box">Select symptoms and hardware details to see likely causes and suggested next steps.</div>
+      <div id="suggestionsEmpty" class="muted-box">Select symptoms and hardware details to see likely causes and first tests.</div>
       <div id="suggestionsResults" class="hidden">
-        <div id="diagnosisSummary" class="diagnosis-summary">
-          <div class="summary-label">Top Likely Cause</div>
-          <div id="primaryCause" class="summary-primary">No primary cause yet</div>
-          <p id="supportingSignal" class="summary-supporting">Select symptoms and hardware details to narrow the diagnosis.</p>
+        <div class="suggestion-block primary-block">
+          <h3>Top Likely Cause</h3>
+          <p id="primaryCause" class="primary-cause">No primary cause yet</p>
+          <p id="supportingSignal" class="supporting-signal">Select symptoms and hardware details to narrow the diagnosis.</p>
         </div>
         <div class="suggestion-block">
-          <h3>Other Possible Causes</h3>
+          <h3>Also Check</h3>
           <ul id="likelyCausesList"></ul>
         </div>
         <div class="suggestion-block">
@@ -115,39 +135,36 @@
       </div>
 
       <div class="actions">
-        <button id="suggestBtn">Refresh Suggestions</button>
+        <button id="suggestBtn" type="button">Refresh Suggestions</button>
       </div>
     </aside>
   </main>
 
-  <section class="panel board-log-panel">
+  <section class="panel history-panel">
     <div class="panel-title-row">
       <h2>Motherboard Issue Log</h2>
-      <span class="status-badge">Optional</span>
     </div>
-    <p class="subtitle section-subtitle">Use this only to note the board, the issue seen, and the fix that worked.</p>
-
+    <p class="section-note">This does not save a case. It only helps you copy a quick note for board-specific issue tracking.</p>
     <div class="form-grid">
       <div class="form-group form-group-span-2">
         <label for="boardLogMotherboard">Motherboard</label>
-        <select id="boardLogMotherboard"></select>
-        <input id="boardLogMotherboardCustom" type="text" class="hidden" placeholder="Enter motherboard manually" />
+        <select id="boardLogMotherboard" name="boardLogMotherboard"></select>
+        <input id="boardLogMotherboardCustom" name="boardLogMotherboardCustom" class="hidden top-gap" type="text" placeholder="Type motherboard model" disabled />
       </div>
       <div class="form-group form-group-span-2">
         <label for="boardLogIssue">Issue</label>
-        <textarea id="boardLogIssue" rows="3" placeholder="Example: No display after shipping with vertical GPU riser installed"></textarea>
+        <textarea id="boardLogIssue" rows="3" placeholder="Example: No display with vertical GPU and riser installed"></textarea>
       </div>
       <div class="form-group form-group-span-2">
         <label for="boardLogFix">Fix Performed</label>
-        <textarea id="boardLogFix" rows="3" placeholder="Example: Removed riser and reseated GPU directly into the board"></textarea>
+        <textarea id="boardLogFix" rows="3" placeholder="Example: Removed riser and mounted GPU directly into the board"></textarea>
       </div>
     </div>
-
     <div class="actions">
-      <button id="copyBoardLogBtn">Copy Log Note</button>
-      <button id="clearBoardLogBtn" class="secondary">Clear Log Note</button>
+      <button id="copyBoardLogBtn" type="button">Copy Log Note</button>
+      <button id="clearBoardLogBtn" type="button" class="secondary">Clear Log</button>
     </div>
-    <div id="boardLogStatus" class="muted-box compact-box">Nothing copied yet.</div>
+    <div id="boardLogStatus" class="muted-box">Nothing copied yet.</div>
   </section>
 
   <script src="app.js"></script>
