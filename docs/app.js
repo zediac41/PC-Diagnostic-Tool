@@ -126,12 +126,16 @@ function clearChecks() {
 function setDefaults() {
   els.diagnosticForm.reset();
   clearChecks();
-  els.gpuTier.disabled = true;
-  els.riserCable.disabled = true;
+  setSelectOrCustom(els.motherboardSelect, els.motherboardCustom, '');
+  els.cpuTier.value = '';
+  els.cooler.value = '';
+  els.ramEachStickGb.value = '';
+  els.ramModules.value = '';
+  els.gpuInstalled.value = '';
   els.gpuTier.value = '';
   els.riserCable.value = '';
-  els.motherboardSelect.value = '';
-  toggleCustomField(els.motherboardSelect, els.motherboardCustom);
+  els.storage.value = '';
+  syncGpuFields();
   renderSuggestions();
 }
 
@@ -334,9 +338,9 @@ async function init() {
   clearBoardLog();
   renderSuggestions();
 
-  els.suggestBtn.addEventListener('click', renderSuggestions);
-  els.loadSampleBtn.addEventListener('click', loadSample);
-  els.resetBtn.addEventListener('click', setDefaults);
+  els.suggestBtn.addEventListener('click', (event) => { event.preventDefault(); renderSuggestions(); });
+  els.loadSampleBtn.addEventListener('click', (event) => { event.preventDefault(); loadSample(); });
+  els.resetBtn.addEventListener('click', (event) => { event.preventDefault(); setDefaults(); });
   els.copyBoardLogBtn.addEventListener('click', copyBoardLogNote);
   els.clearBoardLogBtn.addEventListener('click', clearBoardLog);
   els.motherboardSelect.addEventListener('change', () => toggleCustomField(els.motherboardSelect, els.motherboardCustom));

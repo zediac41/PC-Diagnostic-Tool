@@ -17,9 +17,14 @@ body {
   color: var(--text);
 }
 
-.site-header, .layout, .board-log-panel {
+.site-header, .layout {
   width: min(1500px, calc(100% - 32px));
   margin: 16px auto;
+}
+
+.board-log-panel {
+  width: min(900px, calc(100% - 32px));
+  margin: 16px auto 28px;
 }
 
 .site-header {
@@ -174,4 +179,17 @@ ul { margin: 0; padding-left: 18px; }
   .site-header, .panel-title-row { flex-direction: column; align-items: flex-start; }
   .form-grid, .checklist-grid { grid-template-columns: 1fr; }
   .form-group-span-2 { grid-column: span 1; }
+}
+
+.section-note {
+  color: var(--muted);
+  margin: 0 0 14px;
+}
+
+.board-log-panel .actions {
+  margin-top: 12px;
+}
+
+.board-log-panel #boardLogStatus {
+  margin-top: 12px;
 }
