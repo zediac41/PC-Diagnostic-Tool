@@ -76,47 +76,17 @@
 
         <h3>Symptoms</h3>
         <div id="symptomChecklist" class="checklist-grid"></div>
-
-        <h3>Issue Details</h3>
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="whenItHappens">When It Happens</label>
-            <input id="whenItHappens" name="whenItHappens" type="text" placeholder="During gaming / idle / boot / install" />
-          </div>
-          <div class="form-group">
-            <label for="frequency">Frequency</label>
-            <select id="frequency" name="frequency">
-              <option value="">Select frequency</option>
-              <option>Constant</option>
-              <option>Intermittent</option>
-              <option>Only once</option>
-              <option>Under load only</option>
-              <option>Idle only</option>
-            </select>
-          </div>
-          <div class="form-group form-group-span-2">
-            <label for="recentChanges">Recent Changes</label>
-            <textarea id="recentChanges" name="recentChanges" rows="3" placeholder="New GPU, shipped system, updated drivers, moved system, etc."></textarea>
-          </div>
-          <div class="form-group form-group-span-2">
-            <label for="notes">Notes</label>
-            <textarea id="notes" name="notes" rows="4" placeholder="Extra observations from the customer or technician"></textarea>
-          </div>
-        </div>
-
-        <h3>Troubleshooting Already Tried</h3>
-        <div id="troubleshootingChecklist" class="checklist-grid"></div>
-      </form>
+</form>
     </section>
 
     <aside class="panel">
       <h2>Suggestions</h2>
-      <div id="suggestionsEmpty" class="muted-box">Select symptoms and fill in any useful details to see likely causes and suggested next steps.</div>
+      <div id="suggestionsEmpty" class="muted-box">Select symptoms and hardware details to see likely causes and suggested next steps.</div>
       <div id="suggestionsResults" class="hidden">
         <div id="diagnosisSummary" class="diagnosis-summary">
           <div class="summary-label">Top Likely Cause</div>
           <div id="primaryCause" class="summary-primary">No primary cause yet</div>
-          <p id="supportingSignal" class="summary-supporting">Add more symptom details or troubleshooting steps to tighten the diagnosis.</p>
+          <p id="supportingSignal" class="summary-supporting">Select symptoms and hardware details to narrow the diagnosis.</p>
         </div>
         <div class="suggestion-block">
           <h3>Other Possible Causes</h3>

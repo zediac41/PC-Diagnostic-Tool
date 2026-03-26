@@ -1,6 +1,5 @@
 const state = {
   symptoms: [],
-  troubleshootingSteps: [],
   rules: [],
   knownProducts: {
     motherboards: [],
@@ -11,7 +10,6 @@ const state = {
 const els = {
   diagnosticForm: document.getElementById('diagnosticForm'),
   symptomChecklist: document.getElementById('symptomChecklist'),
-  troubleshootingChecklist: document.getElementById('troubleshootingChecklist'),
   suggestBtn: document.getElementById('suggestBtn'),
   loadSampleBtn: document.getElementById('loadSampleBtn'),
   resetBtn: document.getElementById('resetBtn'),
@@ -151,17 +149,6 @@ function loadSample() {
   document.getElementById('gpuModel').value = 'RTX 4080 Super';
   document.getElementById('riserCable').value = 'true';
   document.getElementById('storage').value = '2TB NVMe';
-  document.getElementById('whenItHappens').value = 'During gaming';
-  document.getElementById('frequency').value = 'Intermittent';
-  document.getElementById('recentChanges').value = 'New GPU installed';
-  document.getElementById('notes').value = 'Black screen and freeze under GPU load';
-
-  document.querySelectorAll('input[name="symptoms"]').forEach((input) => {
-    input.checked = ['Freeze', 'No display', 'Game crash'].includes(input.value);
-  });
-  document.querySelectorAll('input[name="troubleshooting"]').forEach((input) => {
-    input.checked = ['Reseated GPU', 'Updated drivers', 'Checked temps'].includes(input.value);
-  });
 
   renderSuggestions();
 }
@@ -180,38 +167,19 @@ function formToCaseObject() {
       storage: parseStorage(document.getElementById('storage').value),
     },
     symptoms: getCheckedValues('symptoms'),
-    symptom_details: {
-      when_it_happens: document.getElementById('whenItHappens').value.trim(),
-      frequency: document.getElementById('frequency').value.trim(),
-      recent_changes: document.getElementById('recentChanges').value.trim(),
-      notes: document.getElementById('notes').value.trim(),
-    },
-    troubleshooting_done: getCheckedValues('troubleshooting'),
   };
 }
 
 function caseMatchesRule(caseData, rule) {
   const { conditions } = rule;
   const symptoms = caseData.symptoms || [];
-  const troubleshooting = caseData.troubleshooting_done || [];
   const system = caseData.system || {};
-  const details = caseData.symptom_details || {};
 
   if (conditions.symptoms && !conditions.symptoms.every((symptom) => symptoms.includes(symptom))) return false;
   if (conditions.gpu_present !== undefined && system.gpu_present !== conditions.gpu_present) return false;
   if (conditions.riser_cable !== undefined && system.riser_cable !== conditions.riser_cable) return false;
   if (conditions.ram_modules !== undefined && system.ram_modules !== conditions.ram_modules) return false;
   if (conditions.ram_modules_gte !== undefined && !(system.ram_modules >= conditions.ram_modules_gte)) return false;
-
-  if (conditions.recent_changes_includes) {
-    const haystack = (details.recent_changes || '').toLowerCase();
-    if (!haystack.includes(conditions.recent_changes_includes.toLowerCase())) return false;
-  }
-  if (conditions.when_it_happens_includes) {
-    const haystack = (details.when_it_happens || '').toLowerCase();
-    if (!haystack.includes(conditions.when_it_happens_includes.toLowerCase())) return false;
-  }
-  if (conditions.troubleshooting_missing && troubleshooting.includes(conditions.troubleshooting_missing)) return false;
 
   return true;
 }
@@ -246,9 +214,6 @@ function getSuggestions(caseData) {
       supportingSignal = 'Riser cable is part of this build and matches the strongest rule.';
     } else if (topRule.conditions?.ram_modules_gte && caseData.system?.ram_modules >= topRule.conditions.ram_modules_gte) {
       supportingSignal = `This system has ${caseData.system.ram_modules} RAM sticks, which strongly fits the top memory path.`;
-    } else if (topRule.conditions?.recent_changes_includes) {
-      supportingSignal = `Recent changes mention ${topRule.conditions.recent_changes_includes}, which points toward this first.`;
-    } else if (topRule.conditions?.when_it_happens_includes) {
       supportingSignal = `The timing mentions ${topRule.conditions.when_it_happens_includes}, which lines up with the top rule.`;
     } else if (caseData.symptoms?.length) {
       supportingSignal = `The selected symptoms most closely match ${topRule.id.replace(/^rule_/, '').replace(/_/g, ' ')}.`;
@@ -270,7 +235,7 @@ function renderSuggestions() {
   const { matches, primaryCause, secondaryCauses, recommendedFirstTests, additionalSteps, supportingSignal } = getSuggestions(caseData);
 
   els.primaryCause.textContent = primaryCause || 'No primary cause yet';
-  els.supportingSignal.textContent = supportingSignal || 'Add more symptom details or troubleshooting steps to tighten the diagnosis.';
+  els.supportingSignal.textContent = supportingSignal || 'Select symptoms and hardware details to narrow the diagnosis.';
   els.likelyCausesList.innerHTML = '';
   els.nextStepsList.innerHTML = '';
   els.matchedRulesList.innerHTML = '';
@@ -332,7 +297,6 @@ function clearBoardLog() {
 async function init() {
   const config = await loadJson('./data/symptoms.json');
   state.symptoms = config.symptoms;
-  state.troubleshootingSteps = config.troubleshooting_steps;
   state.rules = await loadJson('./data/rules.json');
   state.knownProducts = await loadJson('./data/known-products.json');
 
@@ -341,7 +305,6 @@ async function init() {
   populateKnownProductSelect(els.boardLogMotherboard, state.knownProducts.motherboards || [], 'Select motherboard');
 
   createChecklistItems(els.symptomChecklist, state.symptoms, 'symptoms');
-  createChecklistItems(els.troubleshootingChecklist, state.troubleshootingSteps, 'troubleshooting');
 
   setDefaults();
   clearBoardLog();
