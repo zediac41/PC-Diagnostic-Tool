@@ -29,14 +29,14 @@
         <div class="form-grid">
           <div class="form-group">
             <label for="caseId">Case ID</label>
-            <input id="caseId" name="caseId" type="text" placeholder="CASE-0001" />
+            <input id="caseId" name="caseId" type="text" placeholder="CASE-0001" readonly />
           </div>
           <div class="form-group">
-            <label for="customerReference">Customer / RMA ID</label>
-            <input id="customerReference" name="customerReference" type="text" placeholder="RMA-12345" />
+            <label for="customerReference">Customer Order #</label>
+            <input id="customerReference" name="customerReference" type="text" placeholder="177123456" />
           </div>
           <div class="form-group">
-            <label for="csr">CSR / Technician</label>
+            <label for="csr">CSR</label>
             <input id="csr" name="csr" type="text" placeholder="Erik" />
           </div>
           <div class="form-group">
@@ -48,12 +48,16 @@
         <h3>System Information</h3>
         <div class="form-grid">
           <div class="form-group">
-            <label for="motherboard">Motherboard</label>
-            <input id="motherboard" name="motherboard" type="text" placeholder="MSI B650 Tomahawk WiFi" />
+            <label for="motherboardSelect">Motherboard</label>
+            <select id="motherboardSelect" name="motherboardSelect"></select>
+            <input id="motherboardCustom" name="motherboardCustom" type="text" class="hidden" placeholder="Enter motherboard manually" />
+            <p class="field-hint">Pick from the known list or choose Custom to log a new board model.</p>
           </div>
           <div class="form-group">
-            <label for="cpu">CPU</label>
-            <input id="cpu" name="cpu" type="text" placeholder="Ryzen 7 7800X3D" />
+            <label for="cpuSelect">CPU</label>
+            <select id="cpuSelect" name="cpuSelect"></select>
+            <input id="cpuCustom" name="cpuCustom" type="text" class="hidden" placeholder="Enter CPU manually" />
+            <p class="field-hint">Pick from the known list or choose Custom to log a new CPU model.</p>
           </div>
           <div class="form-group">
             <label for="cooler">Cooler</label>

@@ -1,0 +1,130 @@
+{
+  "motherboards": [
+    {
+      "group": "ASUS",
+      "items": [
+        "TUF GAMING A520M-PLUS WIFI",
+        "TUF GAMING A620M-PLUS WIFI",
+        "TUF GAMING X870-PLUS WIFI",
+        "TUF GAMING Z790-PLUS WIFI",
+        "TUF GAMING B860M-PLUS WIFI",
+        "PRIME Z890M-PLUS WIFI",
+        "TUF GAMING Z890-PLUS WIFI",
+        "Z890 AYW GAMING WIFI W",
+        "TUF GAMING B850-BTF WIFI W",
+        "ROG STRIX B860-I GAMING WIFI",
+        "ROG STRIX Z890-I GAMING WIFI",
+        "ROG STRIX B550-F GAMING WIFI II",
+        "ROG MAXIMUS Z890 HERO BTF",
+        "ROG STRIX B850-A GAMING WIFI",
+        "ROG STRIX X870-A GAMING WIFI",
+        "ROG STRIX X870E-E GAMING WIFI",
+        "ROG CROSSHAIR X870E HERO",
+        "ROG STRIX B850-I GAMING WIFI",
+        "ROG STRIX X870-I GAMING WIFI",
+        "Pro WS W790-ACE",
+        "TUF GAMING B850M-PLUS WIFI",
+        "ROG MAXIMUS Z890 HERO",
+        "ROG STRIX Z890-A GAMING WIFI",
+        "ROG STRIX Z890-E GAMING WIFI",
+        "TUF GAMING B850-PLUS WIFI",
+        "ProArt Z890-CREATOR WIFI",
+        "ROG CROSSHAIR X870E EXTREME",
+        "ROG MAXIMUS Z790 DARK HERO"
+      ]
+    },
+    {
+      "group": "MSI",
+      "items": [
+        "MAG B650 TOMAHAWK WIFI",
+        "B850 GAMING PLUS WIFI",
+        "PRO X870-P WIFI",
+        "MAG X870 TOMAHAWK WIFI",
+        "PRO Z790-P WIFI",
+        "MAG Z790 TOMAHAWK MAX WIFI",
+        "PRO Z890-P WIFI",
+        "MAG Z890 TOMAHAWK WIFI",
+        "MEG Z890 ACE",
+        "PRO Z890-S WIFI PZ",
+        "B760M PROJECT ZERO",
+        "B650M PROJECT ZERO",
+        "PRO B760-P WIFI DDR4",
+        "PRO B760M-VC WIFI BULK",
+        "MPG Z790 EDGE TI MAX WIFI",
+        "PRO B840-P WIFI",
+        "PRO B860-VC WIFI",
+        "PRO B550M-VC WIFI",
+        "Z890 GAMING PLUS WIFI",
+        "X870E GAMING PLUS WIFI",
+        "PRO B850M-A WIFI PZ",
+        "PRO B760-VC WIFI",
+        "PRO B850M-VC WIFI6E",
+        "MPG X870E EDGE TI WIFI",
+        "PRO B860M-VC WIFI6E"
+      ]
+    },
+    {
+      "group": "Gigabyte",
+      "items": [
+        "A520I AC",
+        "B850M AORUS ELITE WIFI6E ICE",
+        "X870 EAGLE WIFI7",
+        "X870 AORUS ELITE WIFI7 ICE",
+        "Z890M AORUS ELITE WIFI7 ICE",
+        "B860M AORUS ELITE WIFI6E ICE",
+        "Z890 EAGLE WIFI7",
+        "Z890 AORUS ELITE WIFI7 ICE",
+        "X870 AORUS STEALTH ICE",
+        "B860I AORUS PRO ICE",
+        "B850M EAGLE WIFI6E ICE",
+        "B850M GAMING X WIFI6E"
+      ]
+    },
+    {
+      "group": "ASRock",
+      "items": [
+        "B660M-HDV",
+        "B650M Pro RS WiFi"
+      ]
+    }
+  ],
+  "cpus": [
+    {
+      "group": "AMD Ryzen 7000",
+      "items": [
+        "Ryzen 5 7600X",
+        "Ryzen 7 7700X",
+        "Ryzen 7 7800X3D",
+        "Ryzen 9 7900X",
+        "Ryzen 9 7950X"
+      ]
+    },
+    {
+      "group": "AMD Ryzen 9000",
+      "items": [
+        "Ryzen 7 9700X",
+        "Ryzen 7 9800X3D",
+        "Ryzen 9 9900X",
+        "Ryzen 9 9950X"
+      ]
+    },
+    {
+      "group": "Intel 13th Gen",
+      "items": [
+        "Core i5-13600K",
+        "Core i7-13700K",
+        "Core i9-13900K",
+        "Core i9-13900KS"
+      ]
+    },
+    {
+      "group": "Intel 14th Gen",
+      "items": [
+        "Core i5-14600K",
+        "Core i7-14700K",
+        "Core i9-14900K",
+        "Core i9-14900KS"
+      ]
+    }
+  ]
+}

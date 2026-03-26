@@ -192,3 +192,19 @@ ul { margin: 0; padding-left: 18px; }
   color: var(--text);
   line-height: 1.45;
 }
+
+
+.field-hint {
+  margin: 0.4rem 0 0;
+  color: var(--muted-text, #94a3b8);
+  font-size: 0.82rem;
+}
+
+.form-group input[readonly] {
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+.form-group select + input {
+  margin-top: 0.55rem;
+}

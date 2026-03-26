@@ -3,6 +3,10 @@ const state = {
   troubleshootingSteps: [],
   rules: [],
   cases: [],
+  knownProducts: {
+    motherboards: [],
+    cpus: [],
+  },
 };
 
 const els = {
@@ -26,6 +30,10 @@ const els = {
   caseSearch: document.getElementById('caseSearch'),
   historyCardTemplate: document.getElementById('historyCardTemplate'),
   caseStatus: document.getElementById('caseStatus'),
+  motherboardSelect: document.getElementById('motherboardSelect'),
+  motherboardCustom: document.getElementById('motherboardCustom'),
+  cpuSelect: document.getElementById('cpuSelect'),
+  cpuCustom: document.getElementById('cpuCustom'),
 };
 
 function todayString() {
@@ -35,6 +43,10 @@ function todayString() {
 function setDefaults() {
   document.getElementById('dateCreated').value = todayString();
   document.getElementById('caseId').value = generateCaseId();
+  els.motherboardSelect.value = '';
+  els.cpuSelect.value = '';
+  toggleCustomField(els.motherboardSelect, els.motherboardCustom);
+  toggleCustomField(els.cpuSelect, els.cpuCustom);
 }
 
 function generateCaseId() {
@@ -46,6 +58,69 @@ async function loadJson(path) {
   const response = await fetch(path);
   if (!response.ok) throw new Error(`Failed to load ${path}`);
   return response.json();
+}
+
+function populateKnownProductSelect(selectEl, groups, placeholderText) {
+  selectEl.innerHTML = '';
+
+  const placeholder = document.createElement('option');
+  placeholder.value = '';
+  placeholder.textContent = placeholderText;
+  selectEl.appendChild(placeholder);
+
+  groups.forEach((group) => {
+    const optgroup = document.createElement('optgroup');
+    optgroup.label = group.group;
+
+    (group.items || []).forEach((item) => {
+      const option = document.createElement('option');
+      option.value = item;
+      option.textContent = item;
+      optgroup.appendChild(option);
+    });
+
+    selectEl.appendChild(optgroup);
+  });
+
+  const customOption = document.createElement('option');
+  customOption.value = '__custom__';
+  customOption.textContent = 'Custom / Not Listed';
+  selectEl.appendChild(customOption);
+}
+
+function toggleCustomField(selectEl, inputEl) {
+  const isCustom = selectEl.value === '__custom__';
+  inputEl.classList.toggle('hidden', !isCustom);
+  inputEl.disabled = !isCustom;
+  inputEl.required = isCustom;
+  if (!isCustom) {
+    inputEl.value = '';
+  }
+}
+
+function getSelectedOrCustom(selectEl, inputEl) {
+  if (selectEl.value === '__custom__') {
+    return inputEl.value.trim();
+  }
+  return selectEl.value.trim();
+}
+
+function setSelectOrCustom(selectEl, inputEl, value) {
+  const normalizedValue = (value || '').trim();
+  const hasOption = [...selectEl.options].some((option) => option.value === normalizedValue);
+
+  if (normalizedValue && hasOption) {
+    selectEl.value = normalizedValue;
+    inputEl.value = '';
+  } else if (normalizedValue) {
+    selectEl.value = '__custom__';
+    inputEl.value = normalizedValue;
+  } else {
+    selectEl.value = '';
+    inputEl.value = '';
+  }
+
+  toggleCustomField(selectEl, inputEl);
 }
 
 function createChecklistItems(container, items, name) {
@@ -86,8 +161,8 @@ function formToCaseObject() {
     csr: document.getElementById('csr').value.trim(),
     customer_reference: document.getElementById('customerReference').value.trim(),
     system: {
-      motherboard: document.getElementById('motherboard').value.trim(),
-      cpu: document.getElementById('cpu').value.trim(),
+      motherboard: getSelectedOrCustom(els.motherboardSelect, els.motherboardCustom),
+      cpu: getSelectedOrCustom(els.cpuSelect, els.cpuCustom),
       cooler: document.getElementById('cooler').value.trim(),
       ram_total_gb: Number(document.getElementById('ramTotalGb').value || 0),
       ram_modules: Number(document.getElementById('ramModules').value || 0),
@@ -204,7 +279,7 @@ function getSuggestions(caseData) {
 
 function renderSuggestions() {
   const caseData = formToCaseObject();
-  const { matches, likelyCauses, suggestions, primaryCause, secondaryCauses, recommendedFirstTests, supportingSignal } = getSuggestions(caseData);
+  const { matches, suggestions, primaryCause, secondaryCauses, recommendedFirstTests, supportingSignal } = getSuggestions(caseData);
 
   els.primaryCause.textContent = primaryCause || 'No primary cause yet';
   els.supportingSignal.textContent = supportingSignal || 'Add more symptom details or troubleshooting steps to tighten the diagnosis.';
@@ -275,8 +350,8 @@ function fillForm(caseData) {
   document.getElementById('dateCreated').value = caseData.date_created || todayString();
   document.getElementById('csr').value = caseData.csr || '';
   document.getElementById('customerReference').value = caseData.customer_reference || '';
-  document.getElementById('motherboard').value = caseData.system?.motherboard || '';
-  document.getElementById('cpu').value = caseData.system?.cpu || '';
+  setSelectOrCustom(els.motherboardSelect, els.motherboardCustom, caseData.system?.motherboard || '');
+  setSelectOrCustom(els.cpuSelect, els.cpuCustom, caseData.system?.cpu || '');
   document.getElementById('cooler').value = caseData.system?.cooler || '';
   document.getElementById('ramTotalGb').value = caseData.system?.ram_total_gb || '';
   document.getElementById('ramModules').value = caseData.system?.ram_modules || '';
@@ -375,6 +450,10 @@ async function init() {
   state.symptoms = config.symptoms;
   state.troubleshootingSteps = config.troubleshooting_steps;
   state.rules = await loadJson('./data/rules.json');
+  state.knownProducts = await loadJson('./data/known-products.json');
+
+  populateKnownProductSelect(els.motherboardSelect, state.knownProducts.motherboards || [], 'Select motherboard');
+  populateKnownProductSelect(els.cpuSelect, state.knownProducts.cpus || [], 'Select CPU');
 
   createChecklistItems(els.symptomChecklist, state.symptoms, 'symptoms');
   createChecklistItems(els.troubleshootingChecklist, state.troubleshootingSteps, 'troubleshooting');
@@ -391,6 +470,8 @@ async function init() {
   els.loadSampleBtn.addEventListener('click', () => fillForm(sampleCase));
   els.newCaseBtn.addEventListener('click', clearForm);
   els.caseSearch.addEventListener('input', (event) => renderCaseHistory(event.target.value));
+  els.motherboardSelect.addEventListener('change', () => toggleCustomField(els.motherboardSelect, els.motherboardCustom));
+  els.cpuSelect.addEventListener('change', () => toggleCustomField(els.cpuSelect, els.cpuCustom));
   els.caseForm.addEventListener('input', () => {
     els.caseStatus.textContent = document.getElementById('resolved').value === 'true' ? 'Resolved' : 'Draft';
   });
