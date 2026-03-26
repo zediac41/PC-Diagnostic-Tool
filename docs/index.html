@@ -10,54 +10,33 @@
   <header class="site-header">
     <div>
       <h1>PC Diagnostic Tool</h1>
-      <p class="subtitle">Internal troubleshooting logger and suggestion helper</p>
+      <p class="subtitle">Internal symptom checker with quick troubleshooting suggestions</p>
     </div>
     <div class="header-actions">
       <button id="loadSampleBtn" class="secondary">Load Sample</button>
-      <button id="newCaseBtn" class="secondary">Clear Form</button>
+      <button id="resetBtn" class="secondary">Clear</button>
     </div>
   </header>
 
   <main class="layout">
     <section class="panel panel-wide">
       <div class="panel-title-row">
-        <h2>New Case</h2>
-        <span id="caseStatus" class="status-badge">Draft</span>
+        <h2>System Details</h2>
+        <span class="status-badge">Suggestion Mode</span>
       </div>
 
-      <form id="caseForm">
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="caseId">Case ID</label>
-            <input id="caseId" name="caseId" type="text" placeholder="CASE-0001" readonly />
-          </div>
-          <div class="form-group">
-            <label for="customerReference">Customer Order #</label>
-            <input id="customerReference" name="customerReference" type="text" placeholder="177123456" />
-          </div>
-          <div class="form-group">
-            <label for="csr">CSR</label>
-            <input id="csr" name="csr" type="text" placeholder="Erik" />
-          </div>
-          <div class="form-group">
-            <label for="dateCreated">Date</label>
-            <input id="dateCreated" name="dateCreated" type="date" />
-          </div>
-        </div>
-
-        <h3>System Information</h3>
+      <form id="diagnosticForm">
         <div class="form-grid">
           <div class="form-group">
             <label for="motherboardSelect">Motherboard</label>
             <select id="motherboardSelect" name="motherboardSelect"></select>
             <input id="motherboardCustom" name="motherboardCustom" type="text" class="hidden" placeholder="Enter motherboard manually" />
-            <p class="field-hint">Pick from the known list or choose Custom to log a new board model.</p>
+            <p class="field-hint">Uses your BIOS tracker board list. Choose Custom if needed.</p>
           </div>
           <div class="form-group">
             <label for="cpuSelect">CPU</label>
             <select id="cpuSelect" name="cpuSelect"></select>
             <input id="cpuCustom" name="cpuCustom" type="text" class="hidden" placeholder="Enter CPU manually" />
-            <p class="field-hint">Pick from the known list or choose Custom to log a new CPU model.</p>
           </div>
           <div class="form-group">
             <label for="cooler">Cooler</label>
@@ -98,7 +77,7 @@
         <h3>Symptoms</h3>
         <div id="symptomChecklist" class="checklist-grid"></div>
 
-        <h3>Situation Details</h3>
+        <h3>Issue Details</h3>
         <div class="form-grid">
           <div class="form-group">
             <label for="whenItHappens">When It Happens</label>
@@ -125,41 +104,14 @@
           </div>
         </div>
 
-        <h3>Troubleshooting Done</h3>
+        <h3>Troubleshooting Already Tried</h3>
         <div id="troubleshootingChecklist" class="checklist-grid"></div>
-
-        <h3>Resolution</h3>
-        <div class="form-grid">
-          <div class="form-group form-group-span-2">
-            <label for="probableCause">Probable Cause</label>
-            <input id="probableCause" name="probableCause" type="text" placeholder="Likely issue before confirming" />
-          </div>
-          <div class="form-group form-group-span-2">
-            <label for="confirmedCause">Confirmed Cause</label>
-            <input id="confirmedCause" name="confirmedCause" type="text" placeholder="Confirmed root cause" />
-          </div>
-          <div class="form-group form-group-span-2">
-            <label for="fixPerformed">Fix Performed</label>
-            <textarea id="fixPerformed" name="fixPerformed" rows="3" placeholder="Describe what solved the issue"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="resolved">Resolved</label>
-            <select id="resolved" name="resolved">
-              <option value="false">No</option>
-              <option value="true">Yes</option>
-            </select>
-          </div>
-          <div class="form-group form-group-span-2">
-            <label for="finalNotes">Final Notes</label>
-            <textarea id="finalNotes" name="finalNotes" rows="3" placeholder="Any important closing notes"></textarea>
-          </div>
-        </div>
       </form>
     </section>
 
     <aside class="panel">
       <h2>Suggestions</h2>
-      <div id="suggestionsEmpty" class="muted-box">Select symptoms and fill in system details to see likely causes and suggested next steps.</div>
+      <div id="suggestionsEmpty" class="muted-box">Select symptoms and fill in any useful details to see likely causes and suggested next steps.</div>
       <div id="suggestionsResults" class="hidden">
         <div id="diagnosisSummary" class="diagnosis-summary">
           <div class="summary-label">Top Likely Cause</div>
@@ -182,33 +134,39 @@
 
       <div class="actions">
         <button id="suggestBtn">Refresh Suggestions</button>
-        <button id="exportBtn">Export JSON</button>
       </div>
     </aside>
   </main>
 
-  <section class="panel history-panel">
+  <section class="panel board-log-panel">
     <div class="panel-title-row">
-      <h2>Case History</h2>
-      <input id="caseSearch" type="text" placeholder="Search cases by ID, motherboard, CPU, symptom, or cause" />
+      <h2>Motherboard Issue Log</h2>
+      <span class="status-badge">Optional</span>
     </div>
-    <div id="caseHistoryEmpty" class="muted-box">Loading cases…</div>
-    <div id="caseHistoryList" class="case-history-list"></div>
-  </section>
+    <p class="subtitle section-subtitle">Use this only to note the board, the issue seen, and the fix that worked.</p>
 
-  <template id="historyCardTemplate">
-    <article class="history-card">
-      <div class="history-card-top">
-        <div>
-          <h3 class="history-title"></h3>
-          <p class="history-meta"></p>
-        </div>
-        <span class="history-resolved"></span>
+    <div class="form-grid">
+      <div class="form-group form-group-span-2">
+        <label for="boardLogMotherboard">Motherboard</label>
+        <select id="boardLogMotherboard"></select>
+        <input id="boardLogMotherboardCustom" type="text" class="hidden" placeholder="Enter motherboard manually" />
       </div>
-      <p class="history-summary"></p>
-      <div class="history-tags"></div>
-    </article>
-  </template>
+      <div class="form-group form-group-span-2">
+        <label for="boardLogIssue">Issue</label>
+        <textarea id="boardLogIssue" rows="3" placeholder="Example: No display after shipping with vertical GPU riser installed"></textarea>
+      </div>
+      <div class="form-group form-group-span-2">
+        <label for="boardLogFix">Fix Performed</label>
+        <textarea id="boardLogFix" rows="3" placeholder="Example: Removed riser and reseated GPU directly into the board"></textarea>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button id="copyBoardLogBtn">Copy Log Note</button>
+      <button id="clearBoardLogBtn" class="secondary">Clear Log Note</button>
+    </div>
+    <div id="boardLogStatus" class="muted-box compact-box">Nothing copied yet.</div>
+  </section>
 
   <script src="app.js"></script>
 </body>
