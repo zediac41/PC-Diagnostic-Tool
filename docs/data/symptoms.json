@@ -12,10 +12,7 @@
     "Overheating",
     "Artifacting",
     "Drive not detected",
-    "Windows install issue",
-    "USB/peripheral issue",
-    "Network issue",
-    "Audio issue"
+    "Windows install issue"
   ],
   "troubleshooting_steps": [
     "Reseated RAM",

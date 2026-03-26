@@ -15,6 +15,9 @@ const els = {
   newCaseBtn: document.getElementById('newCaseBtn'),
   suggestionsEmpty: document.getElementById('suggestionsEmpty'),
   suggestionsResults: document.getElementById('suggestionsResults'),
+  diagnosisSummary: document.getElementById('diagnosisSummary'),
+  primaryCause: document.getElementById('primaryCause'),
+  supportingSignal: document.getElementById('supportingSignal'),
   likelyCausesList: document.getElementById('likelyCausesList'),
   nextStepsList: document.getElementById('nextStepsList'),
   matchedRulesList: document.getElementById('matchedRulesList'),
@@ -153,16 +156,58 @@ function getSuggestions(caseData) {
     .filter((rule) => caseMatchesRule(caseData, rule))
     .sort((a, b) => (b.priority || 0) - (a.priority || 0));
 
-  const likelyCauses = [...new Set(matches.flatMap((rule) => rule.likely_causes || []))];
-  const suggestions = [...new Set(matches.flatMap((rule) => rule.suggestions || []))];
+  const causeScores = new Map();
+  const stepScores = new Map();
 
-  return { matches, likelyCauses, suggestions };
+  matches.forEach((rule) => {
+    const priority = rule.priority || 0;
+    (rule.likely_causes || []).forEach((cause, index) => {
+      const weight = Math.max(priority - index * 5, 1);
+      causeScores.set(cause, (causeScores.get(cause) || 0) + weight);
+    });
+    (rule.suggestions || []).forEach((step, index) => {
+      const weight = Math.max(priority - index * 3, 1);
+      stepScores.set(step, (stepScores.get(step) || 0) + weight);
+    });
+  });
+
+  const likelyCauses = [...causeScores.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .map(([cause]) => cause);
+
+  const suggestions = [...stepScores.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .map(([step]) => step);
+
+  const primaryCause = likelyCauses[0] || '';
+  const secondaryCauses = likelyCauses.slice(1, 5);
+  const recommendedFirstTests = suggestions.slice(0, 4);
+  const topRule = matches[0] || null;
+  let supportingSignal = '';
+
+  if (topRule) {
+    if (topRule.conditions?.riser_cable && caseData.system?.riser_cable) {
+      supportingSignal = 'Riser cable is part of this build and matches the top rule.';
+    } else if (topRule.conditions?.ram_modules_gte && caseData.system?.ram_modules >= topRule.conditions.ram_modules_gte) {
+      supportingSignal = `This case has ${caseData.system.ram_modules} RAM sticks, which matches the strongest memory rule.`;
+    } else if (topRule.conditions?.recent_changes_includes) {
+      supportingSignal = `Recent changes mention ${topRule.conditions.recent_changes_includes}, which points toward this path first.`;
+    } else if (topRule.conditions?.when_it_happens_includes) {
+      supportingSignal = `The issue timing mentions ${topRule.conditions.when_it_happens_includes}, which lines up with the top rule.`;
+    } else if (caseData.symptoms?.length) {
+      supportingSignal = `The selected symptoms best match ${topRule.id.replace(/^rule_/, '').replace(/_/g, ' ')}.`;
+    }
+  }
+
+  return { matches, likelyCauses, suggestions, primaryCause, secondaryCauses, recommendedFirstTests, supportingSignal };
 }
 
 function renderSuggestions() {
   const caseData = formToCaseObject();
-  const { matches, likelyCauses, suggestions } = getSuggestions(caseData);
+  const { matches, likelyCauses, suggestions, primaryCause, secondaryCauses, recommendedFirstTests, supportingSignal } = getSuggestions(caseData);
 
+  els.primaryCause.textContent = primaryCause || 'No primary cause yet';
+  els.supportingSignal.textContent = supportingSignal || 'Add more symptom details or troubleshooting steps to tighten the diagnosis.';
   els.likelyCausesList.innerHTML = '';
   els.nextStepsList.innerHTML = '';
   els.matchedRulesList.innerHTML = '';
@@ -173,23 +218,37 @@ function renderSuggestions() {
     return;
   }
 
-  likelyCauses.forEach((item) => {
+  secondaryCauses.forEach((item) => {
     const li = document.createElement('li');
     li.textContent = item;
     els.likelyCausesList.appendChild(li);
   });
 
-  suggestions.forEach((item) => {
+  if (!secondaryCauses.length) {
+    const li = document.createElement('li');
+    li.textContent = 'No additional likely causes yet.';
+    els.likelyCausesList.appendChild(li);
+  }
+
+  recommendedFirstTests.forEach((item) => {
     const li = document.createElement('li');
     li.textContent = item;
     els.nextStepsList.appendChild(li);
   });
 
-  matches.forEach((rule) => {
+  suggestions.slice(4, 8).forEach((item) => {
     const li = document.createElement('li');
-    li.textContent = `${rule.id} (${rule.priority || 0})`;
+    li.textContent = item;
     els.matchedRulesList.appendChild(li);
   });
+
+  if (!suggestions.slice(4, 8).length) {
+    matches.slice(0, 4).forEach((rule) => {
+      const li = document.createElement('li');
+      li.textContent = `${rule.id.replace(/^rule_/, '').replace(/_/g, ' ')} (${rule.priority || 0})`;
+      els.matchedRulesList.appendChild(li);
+    });
+  }
 
   els.suggestionsEmpty.classList.add('hidden');
   els.suggestionsResults.classList.remove('hidden');

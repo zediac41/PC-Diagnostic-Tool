@@ -29,14 +29,14 @@
         <div class="form-grid">
           <div class="form-group">
             <label for="caseId">Case ID</label>
-            <input id="caseId" name="caseId" type="text" placeholder="CASE-0001" readonly />
+            <input id="caseId" name="caseId" type="text" placeholder="CASE-0001" />
           </div>
           <div class="form-group">
-            <label for="customerReference">Customer Order #</label>
-            <input id="customerReference" name="customerReference" type="text" placeholder="177123456" />
+            <label for="customerReference">Customer / RMA ID</label>
+            <input id="customerReference" name="customerReference" type="text" placeholder="RMA-12345" />
           </div>
           <div class="form-group">
-            <label for="csr">CSR</label>
+            <label for="csr">CSR / Technician</label>
             <input id="csr" name="csr" type="text" placeholder="Erik" />
           </div>
           <div class="form-group">
@@ -157,16 +157,21 @@
       <h2>Suggestions</h2>
       <div id="suggestionsEmpty" class="muted-box">Select symptoms and fill in system details to see likely causes and suggested next steps.</div>
       <div id="suggestionsResults" class="hidden">
+        <div id="diagnosisSummary" class="diagnosis-summary">
+          <div class="summary-label">Top Likely Cause</div>
+          <div id="primaryCause" class="summary-primary">No primary cause yet</div>
+          <p id="supportingSignal" class="summary-supporting">Add more symptom details or troubleshooting steps to tighten the diagnosis.</p>
+        </div>
         <div class="suggestion-block">
-          <h3>Likely Causes</h3>
+          <h3>Other Possible Causes</h3>
           <ul id="likelyCausesList"></ul>
         </div>
         <div class="suggestion-block">
-          <h3>Suggested Next Steps</h3>
+          <h3>Recommended First Tests</h3>
           <ul id="nextStepsList"></ul>
         </div>
         <div class="suggestion-block">
-          <h3>Matched Rules</h3>
+          <h3>Additional Next Steps</h3>
           <ul id="matchedRulesList"></ul>
         </div>
       </div>
