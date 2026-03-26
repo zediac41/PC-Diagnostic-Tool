@@ -1,0 +1,113 @@
+[
+  {
+    "id": "rule_freeze_riser_gpu",
+    "conditions": {
+      "symptoms": ["Freeze"],
+      "gpu_present": true,
+      "riser_cable": true,
+      "troubleshooting_missing": "Removed riser"
+    },
+    "suggestions": [
+      "Test the system with the GPU mounted directly and no riser cable.",
+      "Reseat the GPU and GPU power cables.",
+      "Run a GPU stress test after removing the riser."
+    ],
+    "likely_causes": [
+      "Riser cable instability",
+      "GPU connection issue"
+    ],
+    "priority": 95
+  },
+  {
+    "id": "rule_bsod_four_dimms",
+    "conditions": {
+      "symptoms": ["BSOD"],
+      "ram_modules_gte": 4
+    },
+    "suggestions": [
+      "Test with two RAM sticks only.",
+      "Reseat all memory modules.",
+      "Try a different RAM kit if available.",
+      "Clear CMOS before retesting."
+    ],
+    "likely_causes": [
+      "Memory instability",
+      "Board or IMC sensitivity with full DIMM population"
+    ],
+    "priority": 90
+  },
+  {
+    "id": "rule_shutdown_load_thermal",
+    "conditions": {
+      "symptoms": ["Random shutdown"],
+      "when_it_happens_includes": "gaming",
+      "troubleshooting_missing": "Checked temps"
+    },
+    "suggestions": [
+      "Check CPU and GPU temperatures under load.",
+      "Inspect cooler mount and fan operation.",
+      "Test with side panel open if airflow is questionable."
+    ],
+    "likely_causes": [
+      "Thermal shutdown",
+      "Cooling issue"
+    ],
+    "priority": 85
+  },
+  {
+    "id": "rule_no_display_recent_gpu_change",
+    "conditions": {
+      "symptoms": ["No display"],
+      "recent_changes_includes": "gpu"
+    },
+    "suggestions": [
+      "Reseat the GPU and power connectors.",
+      "Test another display output and cable.",
+      "Try the system without the riser cable if one is installed.",
+      "Test with another GPU if available."
+    ],
+    "likely_causes": [
+      "GPU seating issue",
+      "Bad display connection",
+      "Riser or GPU fault"
+    ],
+    "priority": 88
+  },
+  {
+    "id": "rule_windows_install_drive",
+    "conditions": {
+      "symptoms": ["Windows install issue"]
+    },
+    "suggestions": [
+      "Check whether the target drive is detected consistently.",
+      "Test installation on another drive.",
+      "Reseat NVMe or SATA connections.",
+      "Clear any unusual storage configuration and retest."
+    ],
+    "likely_causes": [
+      "Bad or unstable storage device",
+      "Drive connection issue",
+      "Windows media or install-path issue"
+    ],
+    "priority": 80
+  },
+  {
+    "id": "rule_artifacting_gpu_path",
+    "conditions": {
+      "symptoms": ["Artifacting"],
+      "gpu_present": true
+    },
+    "suggestions": [
+      "Test another GPU if available.",
+      "Check GPU thermals and fan behavior.",
+      "Inspect display cable and alternate outputs.",
+      "Test without the riser cable if present."
+    ],
+    "likely_causes": [
+      "GPU instability",
+      "Display path issue",
+      "Thermal issue"
+    ],
+    "priority": 89
+  }
+]
