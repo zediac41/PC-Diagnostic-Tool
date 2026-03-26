@@ -288,7 +288,7 @@ function renderCaseHistory(filter = '') {
   filtered.forEach((caseData) => {
     const fragment = els.historyCardTemplate.content.cloneNode(true);
     fragment.querySelector('.history-title').textContent = `${caseData.case_id} • ${caseData.system?.motherboard || 'Unknown board'}`;
-    fragment.querySelector('.history-meta').textContent = `${caseData.date_created || ''} • ${caseData.csr || 'Unknown CSR'} • ${caseData.customer_reference || 'No customer ID'}`;
+    fragment.querySelector('.history-meta').textContent = `${caseData.date_created || ''} • ${caseData.csr || 'Unknown CSR'} • ${caseData.customer_reference || 'No order #'}`;
     fragment.querySelector('.history-summary').textContent = `${(caseData.symptoms || []).join(', ') || 'No symptoms'} • ${caseData.resolution?.confirmed_cause || caseData.resolution?.probable_cause || 'No cause logged yet'}`;
 
     const resolvedBadge = fragment.querySelector('.history-resolved');
