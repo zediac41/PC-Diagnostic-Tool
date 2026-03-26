@@ -23,7 +23,6 @@ const els = {
   motherboardSelect: document.getElementById('motherboardSelect'),
   motherboardCustom: document.getElementById('motherboardCustom'),
   cpuSelect: document.getElementById('cpuSelect'),
-  cpuCustom: document.getElementById('cpuCustom'),
   boardLogMotherboard: document.getElementById('boardLogMotherboard'),
   boardLogMotherboardCustom: document.getElementById('boardLogMotherboardCustom'),
   boardLogIssue: document.getElementById('boardLogIssue'),
@@ -122,10 +121,6 @@ function getCheckedValues(name) {
   return [...document.querySelectorAll(`input[name="${name}"]:checked`)].map((input) => input.value);
 }
 
-function parseStorage(value) {
-  return value.split(',').map((item) => item.trim()).filter(Boolean);
-}
-
 function setDefaults() {
   els.diagnosticForm.reset();
   document.querySelectorAll('input[type="checkbox"]').forEach((input) => {
@@ -135,20 +130,19 @@ function setDefaults() {
   els.motherboardSelect.value = '';
   els.cpuSelect.value = '';
   toggleCustomField(els.motherboardSelect, els.motherboardCustom);
-  toggleCustomField(els.cpuSelect, els.cpuCustom);
   renderSuggestions();
 }
 
 function loadSample() {
   setSelectOrCustom(els.motherboardSelect, els.motherboardCustom, 'MAG B650 TOMAHAWK WIFI');
-  setSelectOrCustom(els.cpuSelect, els.cpuCustom, 'Ryzen 7 7800X3D');
+  els.cpuSelect.value = 'High';
   document.getElementById('cooler').value = '360mm AIO';
   document.getElementById('ramTotalGb').value = '32';
   document.getElementById('ramModules').value = '2';
   document.getElementById('gpuPresent').value = 'true';
   document.getElementById('gpuModel').value = 'RTX 4080 Super';
   document.getElementById('riserCable').value = 'true';
-  document.getElementById('storage').value = '2TB NVMe';
+  document.getElementById('storage').value = 'Gen 4';
 
   renderSuggestions();
 }
@@ -157,14 +151,14 @@ function formToCaseObject() {
   return {
     system: {
       motherboard: getSelectedOrCustom(els.motherboardSelect, els.motherboardCustom),
-      cpu: getSelectedOrCustom(els.cpuSelect, els.cpuCustom),
+      cpu: els.cpuSelect.value,
       cooler: document.getElementById('cooler').value.trim(),
       ram_total_gb: Number(document.getElementById('ramTotalGb').value || 0),
       ram_modules: Number(document.getElementById('ramModules').value || 0),
       gpu_present: document.getElementById('gpuPresent').value === 'true',
       gpu_model: document.getElementById('gpuModel').value.trim(),
       riser_cable: document.getElementById('riserCable').value === 'true',
-      storage: parseStorage(document.getElementById('storage').value),
+      storage: document.getElementById('storage').value ? [document.getElementById('storage').value] : [],
     },
     symptoms: getCheckedValues('symptoms'),
   };
@@ -174,12 +168,17 @@ function caseMatchesRule(caseData, rule) {
   const { conditions } = rule;
   const symptoms = caseData.symptoms || [];
   const system = caseData.system || {};
+  const cooler = (system.cooler || '').toLowerCase();
+  const storageType = Array.isArray(system.storage) ? system.storage[0] || '' : '';
 
   if (conditions.symptoms && !conditions.symptoms.every((symptom) => symptoms.includes(symptom))) return false;
   if (conditions.gpu_present !== undefined && system.gpu_present !== conditions.gpu_present) return false;
   if (conditions.riser_cable !== undefined && system.riser_cable !== conditions.riser_cable) return false;
   if (conditions.ram_modules !== undefined && system.ram_modules !== conditions.ram_modules) return false;
   if (conditions.ram_modules_gte !== undefined && !(system.ram_modules >= conditions.ram_modules_gte)) return false;
+  if (conditions.cpu_tier !== undefined && system.cpu !== conditions.cpu_tier) return false;
+  if (conditions.storage_type !== undefined && storageType !== conditions.storage_type) return false;
+  if (conditions.cooler_keywords && !conditions.cooler_keywords.some((keyword) => cooler.includes(String(keyword).toLowerCase()))) return false;
 
   return true;
 }
@@ -211,10 +210,13 @@ function getSuggestions(caseData) {
   let supportingSignal = '';
   if (topRule) {
     if (topRule.conditions?.riser_cable && caseData.system?.riser_cable) {
-      supportingSignal = 'Riser cable is part of this build and matches the strongest rule.';
-    } else if (topRule.conditions?.ram_modules_gte && caseData.system?.ram_modules >= topRule.conditions.ram_modules_gte) {
-      supportingSignal = `This system has ${caseData.system.ram_modules} RAM sticks, which strongly fits the top memory path.`;
-      supportingSignal = `The timing mentions ${topRule.conditions.when_it_happens_includes}, which lines up with the top rule.`;
+      supportingSignal = 'This build uses a riser cable, which strongly matches the top diagnostic path.';
+    } else if (topRule.conditions?.ram_modules === 4 && caseData.system?.ram_modules === 4) {
+      supportingSignal = 'This system uses 4 RAM sticks, which raises memory and board compatibility suspicion.';
+    } else if (topRule.conditions?.storage_type && caseData.system?.storage?.[0] === topRule.conditions.storage_type) {
+      supportingSignal = `This system is using ${topRule.conditions.storage_type} storage, which matches the strongest path.`;
+    } else if (topRule.conditions?.cpu_tier && caseData.system?.cpu === topRule.conditions.cpu_tier) {
+      supportingSignal = `The selected CPU tier is ${topRule.conditions.cpu_tier}, which aligns with the top rule.`;
     } else if (caseData.symptoms?.length) {
       supportingSignal = `The selected symptoms most closely match ${topRule.id.replace(/^rule_/, '').replace(/_/g, ' ')}.`;
     }
@@ -301,7 +303,6 @@ async function init() {
   state.knownProducts = await loadJson('./data/known-products.json');
 
   populateKnownProductSelect(els.motherboardSelect, state.knownProducts.motherboards || [], 'Select motherboard');
-  populateKnownProductSelect(els.cpuSelect, state.knownProducts.cpus || [], 'Select CPU');
   populateKnownProductSelect(els.boardLogMotherboard, state.knownProducts.motherboards || [], 'Select motherboard');
 
   createChecklistItems(els.symptomChecklist, state.symptoms, 'symptoms');
@@ -316,7 +317,6 @@ async function init() {
   els.copyBoardLogBtn.addEventListener('click', copyBoardLogNote);
   els.clearBoardLogBtn.addEventListener('click', clearBoardLog);
   els.motherboardSelect.addEventListener('change', () => toggleCustomField(els.motherboardSelect, els.motherboardCustom));
-  els.cpuSelect.addEventListener('change', () => toggleCustomField(els.cpuSelect, els.cpuCustom));
   els.boardLogMotherboard.addEventListener('change', () => toggleCustomField(els.boardLogMotherboard, els.boardLogMotherboardCustom));
   els.diagnosticForm.addEventListener('input', renderSuggestions);
 }

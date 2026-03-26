@@ -34,9 +34,13 @@
             <p class="field-hint">Uses your BIOS tracker board list. Choose Custom if needed.</p>
           </div>
           <div class="form-group">
-            <label for="cpuSelect">CPU</label>
-            <select id="cpuSelect" name="cpuSelect"></select>
-            <input id="cpuCustom" name="cpuCustom" type="text" class="hidden" placeholder="Enter CPU manually" />
+            <label for="cpuSelect">CPU Tier</label>
+            <select id="cpuSelect" name="cpuSelect">
+              <option value="">Select CPU Tier</option>
+              <option value="Low">Low</option>
+              <option value="Mid">Mid</option>
+              <option value="High">High</option>
+            </select>
           </div>
           <div class="form-group">
             <label for="cooler">Cooler</label>
@@ -48,10 +52,14 @@
           </div>
           <div class="form-group">
             <label for="ramModules">RAM Sticks</label>
-            <input id="ramModules" name="ramModules" type="number" min="0" placeholder="2" />
+            <select id="ramModules" name="ramModules">
+              <option value="">Select RAM Sticks</option>
+              <option value="2">2</option>
+              <option value="4">4</option>
+            </select>
           </div>
           <div class="form-group">
-            <label for="gpuPresent">GPU Present</label>
+            <label for="gpuPresent">GPU Installed</label>
             <select id="gpuPresent" name="gpuPresent">
               <option value="true">Yes</option>
               <option value="false">No</option>
@@ -70,7 +78,11 @@
           </div>
           <div class="form-group form-group-span-2">
             <label for="storage">Storage</label>
-            <input id="storage" name="storage" type="text" placeholder="2TB NVMe, 4TB SATA SSD" />
+            <select id="storage" name="storage">
+              <option value="">Select Storage Generation</option>
+              <option value="Gen 4">Gen 4</option>
+              <option value="Gen 5">Gen 5</option>
+            </select>
           </div>
         </div>
 

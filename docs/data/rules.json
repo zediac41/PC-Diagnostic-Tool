@@ -1,378 +1,226 @@
 [
   {
-    "id": "rule_freeze_riser_gpu",
-    "conditions": {
-      "symptoms": [
-        "Freeze"
-      ],
-      "gpu_present": true,
-      "riser_cable": true,
-      "troubleshooting_missing": "Removed riser"
-    },
-    "suggestions": [
-      "Test the system with the GPU mounted directly and no riser cable.",
-      "Reseat the GPU and GPU power cables.",
-      "Run a GPU stress test after removing the riser."
-    ],
-    "likely_causes": [
-      "Riser cable instability",
-      "GPU connection issue"
-    ],
-    "priority": 95
+    "id": "rule_bsod_four_sticks",
+    "conditions": {"symptoms": ["BSOD"], "ram_modules": 4},
+    "likely_causes": ["Possible RAM instability", "Possible motherboard memory compatibility issue"],
+    "suggestions": ["Test with 2 RAM sticks only.", "Reseat the RAM and clear CMOS.", "Retest with a known-good RAM kit if available.", "If stable on 2 sticks, keep memory configuration as the main suspect."],
+    "priority": 98
   },
   {
-    "id": "rule_bsod_four_dimms",
-    "conditions": {
-      "symptoms": [
-        "BSOD"
-      ],
-      "ram_modules_gte": 4
-    },
-    "suggestions": [
-      "Test with two RAM sticks only.",
-      "Reseat all memory modules.",
-      "Try a different RAM kit if available.",
-      "Clear CMOS before retesting."
-    ],
-    "likely_causes": [
-      "Memory instability",
-      "Board or IMC sensitivity with full DIMM population"
-    ],
-    "priority": 90
-  },
-  {
-    "id": "rule_bsod_general_memory_path",
-    "conditions": {
-      "symptoms": [
-        "BSOD"
-      ],
-      "troubleshooting_missing": "Tested another RAM kit"
-    },
-    "suggestions": [
-      "Reseat RAM and test one stick at a time.",
-      "Clear CMOS and retest with minimal hardware.",
-      "Try another known-good RAM kit if available."
-    ],
-    "likely_causes": [
-      "Memory instability",
-      "Motherboard memory training issue"
-    ],
-    "priority": 84
-  },
-  {
-    "id": "rule_bsod_storage_windows_path",
-    "conditions": {
-      "symptoms": [
-        "BSOD"
-      ],
-      "when_it_happens_includes": "windows"
-    },
-    "suggestions": [
-      "Check whether the issue follows the OS drive.",
-      "Test with another drive or fresh Windows install if appropriate.",
-      "Update chipset and storage-related drivers."
-    ],
-    "likely_causes": [
-      "Corrupt Windows installation",
-      "Failing or unstable storage device",
-      "Driver-related crash"
-    ],
-    "priority": 78
-  },
-  {
-    "id": "rule_shutdown_load_thermal",
-    "conditions": {
-      "symptoms": [
-        "Random shutdown"
-      ],
-      "when_it_happens_includes": "gaming",
-      "troubleshooting_missing": "Checked temps"
-    },
-    "suggestions": [
-      "Check CPU and GPU temperatures under load.",
-      "Inspect cooler mount, pump/fan operation, and thermal paste contact.",
-      "Test with the side panel open if airflow is questionable."
-    ],
-    "likely_causes": [
-      "Thermal shutdown",
-      "Cooling issue"
-    ],
-    "priority": 85
-  },
-  {
-    "id": "rule_shutdown_power_path",
-    "conditions": {
-      "symptoms": [
-        "Random shutdown"
-      ],
-      "troubleshooting_missing": "Checked power connections"
-    },
-    "suggestions": [
-      "Check all motherboard and GPU power connections.",
-      "Inspect for loose extension cables or adapters.",
-      "Test outside the case if there is any concern about a short or mounting issue."
-    ],
-    "likely_causes": [
-      "Power delivery issue",
-      "Loose connection",
-      "Short or grounding issue"
-    ],
-    "priority": 83
-  },
-  {
-    "id": "rule_restart_power_or_instability",
-    "conditions": {
-      "symptoms": [
-        "Restarting on its own"
-      ]
-    },
-    "suggestions": [
-      "Check power connections and reseat RAM.",
-      "Clear CMOS and retest with minimal hardware.",
-      "Monitor whether the restart happens at idle, boot, or under load."
-    ],
-    "likely_causes": [
-      "Power instability",
-      "Memory instability",
-      "Motherboard issue"
-    ],
-    "priority": 82
-  },
-  {
-    "id": "rule_freeze_general_memory_or_storage",
-    "conditions": {
-      "symptoms": [
-        "Freeze"
-      ]
-    },
-    "suggestions": [
-      "Test one RAM stick at a time if memory has not been isolated.",
-      "Check whether the freeze follows a specific drive, app, or game.",
-      "Watch temps and note whether audio continues or the display cuts out."
-    ],
-    "likely_causes": [
-      "Memory instability",
-      "Storage or OS issue",
-      "Driver-related hang"
-    ],
-    "priority": 72
-  },
-  {
-    "id": "rule_no_display_recent_gpu_change",
-    "conditions": {
-      "symptoms": [
-        "No display"
-      ],
-      "recent_changes_includes": "gpu"
-    },
-    "suggestions": [
-      "Reseat the GPU and power connectors.",
-      "Test another display output and cable.",
-      "Try the system without the riser cable if one is installed.",
-      "Test with another GPU if available."
-    ],
-    "likely_causes": [
-      "GPU seating issue",
-      "Bad display connection",
-      "Riser or GPU fault"
-    ],
-    "priority": 88
-  },
-  {
-    "id": "rule_no_display_with_riser",
-    "conditions": {
-      "symptoms": [
-        "No display"
-      ],
-      "gpu_present": true,
-      "riser_cable": true
-    },
-    "suggestions": [
-      "Bypass the riser cable and test direct GPU mounting.",
-      "Reseat the GPU and check PCIe power connections.",
-      "Try another known-good display cable and port."
-    ],
-    "likely_causes": [
-      "Riser cable issue",
-      "GPU not fully seated",
-      "Display path issue"
-    ],
-    "priority": 92
-  },
-  {
-    "id": "rule_no_boot_drive_or_os",
-    "conditions": {
-      "symptoms": [
-        "No boot"
-      ]
-    },
-    "suggestions": [
-      "Confirm the drive is detected consistently.",
-      "Reseat or swap the drive being used for boot.",
-      "Try a known-good OS drive if available."
-    ],
-    "likely_causes": [
-      "Boot drive failure",
-      "Drive connection issue",
-      "Corrupt operating system"
-    ],
-    "priority": 84
-  },
-  {
-    "id": "rule_no_post_minimal_hardware",
-    "conditions": {
-      "symptoms": [
-        "No POST"
-      ]
-    },
-    "suggestions": [
-      "Clear CMOS and test with minimal hardware only.",
-      "Test one RAM stick at a time in the primary slot.",
-      "Check CPU seating, cooler pressure, and board power connections.",
-      "Test outside the case if a short is possible."
-    ],
-    "likely_causes": [
-      "Memory training failure",
-      "CPU or motherboard issue",
-      "Short or mounting issue"
-    ],
-    "priority": 93
-  },
-  {
-    "id": "rule_game_crash_gpu_path",
-    "conditions": {
-      "symptoms": [
-        "Game crash"
-      ],
-      "gpu_present": true
-    },
-    "suggestions": [
-      "Update or clean reinstall GPU drivers.",
-      "Check GPU temps and fan behavior under load.",
-      "Test another GPU or bypass the riser if one is installed."
-    ],
-    "likely_causes": [
-      "GPU instability",
-      "Driver issue",
-      "Riser-related instability"
-    ],
+    "id": "rule_bsod_gen5_storage",
+    "conditions": {"symptoms": ["BSOD"], "storage_type": "Gen 5"},
+    "likely_causes": ["Possible storage-related issue", "Possible motherboard storage path issue"],
+    "suggestions": ["Test with a different SSD if available.", "Move the drive to another supported slot if applicable.", "Check whether the problem follows the drive.", "Keep storage path issues high on the list for this system."],
     "priority": 86
   },
   {
-    "id": "rule_game_crash_memory_path",
-    "conditions": {
-      "symptoms": [
-        "Game crash"
-      ],
-      "ram_modules_gte": 4
-    },
-    "suggestions": [
-      "Retest with fewer RAM sticks if possible.",
-      "Try another known-good RAM kit.",
-      "Check whether the crash is limited to one game or occurs across multiple titles."
-    ],
-    "likely_causes": [
-      "Memory instability",
-      "Board sensitivity with current memory configuration"
-    ],
-    "priority": 79
+    "id": "rule_bsod_general",
+    "conditions": {"symptoms": ["BSOD"]},
+    "likely_causes": ["Possible RAM instability", "Possible storage-related issue", "Possible motherboard issue"],
+    "suggestions": ["Test the RAM first.", "Clear CMOS and retest.", "Try another drive if the issue continues.", "Reduce the system to minimal hardware if needed."],
+    "priority": 78
   },
   {
-    "id": "rule_slow_performance_storage_or_thermal",
-    "conditions": {
-      "symptoms": [
-        "Slow performance"
-      ]
-    },
-    "suggestions": [
-      "Check temperatures during normal use and under load.",
-      "Check whether the slowdown affects the whole system or one drive/app only.",
-      "Test from another drive or fresh Windows install if behavior looks OS-related."
-    ],
-    "likely_causes": [
-      "Thermal throttling",
-      "Storage slowdown",
-      "Windows or driver issue"
-    ],
-    "priority": 74
+    "id": "rule_freeze_riser",
+    "conditions": {"symptoms": ["Freeze"], "gpu_present": true, "riser_cable": true},
+    "likely_causes": ["Likely riser cable issue", "Possible GPU connection issue"],
+    "suggestions": ["Remove the riser and test the GPU directly in the board.", "Reseat the GPU and GPU power connections.", "Retest under the same load after bypassing the riser.", "If the issue stops, keep the riser as the top suspect."],
+    "priority": 97
   },
   {
-    "id": "rule_overheating_cooler_path",
-    "conditions": {
-      "symptoms": [
-        "Overheating"
-      ]
-    },
-    "suggestions": [
-      "Inspect cooler mount, fan curve, and pump/fan operation.",
-      "Check for blocked airflow or heavy dust buildup.",
-      "Retest with the side panel open if case airflow is in question."
-    ],
-    "likely_causes": [
-      "Poor cooler contact",
-      "Failed pump or fan",
-      "Restricted airflow"
-    ],
-    "priority": 94
-  },
-  {
-    "id": "rule_artifacting_gpu_path",
-    "conditions": {
-      "symptoms": [
-        "Artifacting"
-      ],
-      "gpu_present": true
-    },
-    "suggestions": [
-      "Test another GPU if available.",
-      "Check GPU thermals and fan behavior.",
-      "Inspect display cable and alternate outputs.",
-      "Test without the riser cable if present."
-    ],
-    "likely_causes": [
-      "GPU instability",
-      "Display path issue",
-      "Thermal issue"
-    ],
+    "id": "rule_freeze_four_sticks",
+    "conditions": {"symptoms": ["Freeze"], "ram_modules": 4},
+    "likely_causes": ["Possible RAM instability", "Possible motherboard memory compatibility issue"],
+    "suggestions": ["Test with 2 RAM sticks only.", "Reseat the RAM and clear CMOS.", "Retest after reducing memory load on the board.", "Try a different RAM kit if needed."],
     "priority": 89
   },
   {
-    "id": "rule_drive_not_detected_path",
-    "conditions": {
-      "symptoms": [
-        "Drive not detected"
-      ]
-    },
-    "suggestions": [
-      "Reseat the drive and confirm it is detected consistently.",
-      "Test another slot, cable, or drive if available.",
-      "Check whether the problem follows one specific drive."
-    ],
-    "likely_causes": [
-      "Bad drive",
-      "Drive connection issue",
-      "Motherboard storage slot issue"
-    ],
-    "priority": 91
+    "id": "rule_freeze_gen5_storage",
+    "conditions": {"symptoms": ["Freeze"], "storage_type": "Gen 5"},
+    "likely_causes": ["Possible storage-related issue", "Possible motherboard storage path issue"],
+    "suggestions": ["Test another SSD if available.", "Move the drive to another supported slot if applicable.", "Check whether the freeze follows the drive.", "Keep the storage path in mind if other tests pass."],
+    "priority": 82
   },
   {
-    "id": "rule_windows_install_drive",
-    "conditions": {
-      "symptoms": [
-        "Windows install issue"
-      ]
-    },
-    "suggestions": [
-      "Check whether the target drive is detected consistently.",
-      "Test installation on another drive.",
-      "Reseat NVMe or SATA connections.",
-      "Clear any unusual storage configuration and retest."
-    ],
-    "likely_causes": [
-      "Bad or unstable storage device",
-      "Drive connection issue",
-      "Windows media or install-path issue"
-    ],
+    "id": "rule_freeze_general",
+    "conditions": {"symptoms": ["Freeze"]},
+    "likely_causes": ["Possible RAM instability", "Possible storage-related issue", "Possible motherboard issue"],
+    "suggestions": ["Start with RAM isolation.", "Clear CMOS and retest.", "Test with minimal hardware if needed.", "Keep storage and motherboard issues on the list if the problem remains."],
+    "priority": 74
+  },
+  {
+    "id": "rule_shutdown_high_cpu_cooling",
+    "conditions": {"symptoms": ["Random shutdown"], "cpu_tier": "High", "cooler_keywords": ["air", "120", "240", "stock"]},
+    "likely_causes": ["Likely cooling issue", "Possible CPU overheating"],
+    "suggestions": ["Check CPU temperatures first.", "Inspect cooler mounting pressure and thermal paste contact.", "Confirm fans or pump are working correctly.", "Retest after addressing cooling."],
+    "priority": 96
+  },
+  {
+    "id": "rule_shutdown_general",
+    "conditions": {"symptoms": ["Random shutdown"]},
+    "likely_causes": ["Possible cooling issue", "Possible motherboard issue", "Possible CPU-related instability"],
+    "suggestions": ["Check temperatures first.", "Inspect cooler operation and mounting.", "Reduce to minimal hardware if needed.", "Keep the board in mind if thermals look normal."],
+    "priority": 80
+  },
+  {
+    "id": "rule_restart_four_sticks",
+    "conditions": {"symptoms": ["Restarting on its own"], "ram_modules": 4},
+    "likely_causes": ["Possible RAM instability", "Possible motherboard memory compatibility issue"],
+    "suggestions": ["Test with 2 RAM sticks only.", "Clear CMOS and retest.", "Reseat the RAM.", "Keep memory configuration high on the suspect list."],
+    "priority": 92
+  },
+  {
+    "id": "rule_restart_general",
+    "conditions": {"symptoms": ["Restarting on its own"]},
+    "likely_causes": ["Possible RAM instability", "Possible motherboard issue", "Possible storage-related issue"],
+    "suggestions": ["Start with RAM isolation.", "Clear CMOS and retest.", "Try a different drive if needed.", "Reduce to minimal hardware if the problem continues."],
+    "priority": 79
+  },
+  {
+    "id": "rule_no_display_riser",
+    "conditions": {"symptoms": ["No display"], "gpu_present": true, "riser_cable": true},
+    "likely_causes": ["Likely riser cable issue", "Possible GPU seating issue", "Possible display path issue"],
+    "suggestions": ["Bypass the riser and test the GPU directly in the board.", "Reseat the GPU and GPU power connections.", "Try another display cable or output.", "If direct mount works, keep the riser as the main cause."],
+    "priority": 99
+  },
+  {
+    "id": "rule_no_display_gpu",
+    "conditions": {"symptoms": ["No display"], "gpu_present": true},
+    "likely_causes": ["Possible GPU seating issue", "Possible display path issue", "Possible motherboard slot issue"],
+    "suggestions": ["Reseat the GPU.", "Check GPU power connections.", "Try another display output or cable.", "Test with another GPU if needed."],
+    "priority": 84
+  },
+  {
+    "id": "rule_no_post_four_sticks",
+    "conditions": {"symptoms": ["No POST"], "ram_modules": 4},
+    "likely_causes": ["Likely RAM issue", "Possible motherboard memory compatibility issue"],
+    "suggestions": ["Test with 1 or 2 RAM sticks only.", "Clear CMOS.", "Reseat the RAM and retest.", "Keep full memory population high on the suspect list."],
+    "priority": 97
+  },
+  {
+    "id": "rule_no_post_high_cpu",
+    "conditions": {"symptoms": ["No POST"], "cpu_tier": "High"},
+    "likely_causes": ["Possible CPU or motherboard issue", "Possible RAM issue"],
+    "suggestions": ["Test with minimal hardware only.", "Check CPU seating and cooler pressure.", "Retest with reduced RAM population.", "Keep CPU and board issues high if memory testing does not resolve it."],
+    "priority": 88
+  },
+  {
+    "id": "rule_no_post_general",
+    "conditions": {"symptoms": ["No POST"]},
+    "likely_causes": ["Possible RAM issue", "Possible CPU or motherboard issue"],
+    "suggestions": ["Clear CMOS.", "Test minimal hardware only.", "Reseat the RAM.", "Check CPU and motherboard connections."],
+    "priority": 82
+  },
+  {
+    "id": "rule_no_boot_gen5",
+    "conditions": {"symptoms": ["No boot"], "storage_type": "Gen 5"},
+    "likely_causes": ["Possible storage-related issue", "Possible motherboard storage path issue"],
+    "suggestions": ["Test another SSD if available.", "Move the drive to another supported slot if applicable.", "Check whether another boot drive works normally.", "Keep the drive path high on the list."],
+    "priority": 92
+  },
+  {
+    "id": "rule_no_boot_general",
+    "conditions": {"symptoms": ["No boot"]},
+    "likely_causes": ["Possible storage-related issue", "Possible motherboard issue"],
+    "suggestions": ["Test with another boot drive.", "Check drive seating.", "Reduce to minimal hardware if needed.", "Keep the board in mind if another drive behaves the same way."],
+    "priority": 80
+  },
+  {
+    "id": "rule_game_crash_riser",
+    "conditions": {"symptoms": ["Game crash"], "gpu_present": true, "riser_cable": true},
+    "likely_causes": ["Likely riser cable issue", "Possible GPU instability", "Possible GPU connection issue"],
+    "suggestions": ["Remove the riser and retest the same game.", "Reseat the GPU and GPU power connections.", "Watch whether crashes stop with direct GPU mounting.", "Keep the riser high on the list if stability improves."],
+    "priority": 96
+  },
+  {
+    "id": "rule_game_crash_four_sticks",
+    "conditions": {"symptoms": ["Game crash"], "ram_modules": 4},
+    "likely_causes": ["Possible RAM instability", "Possible motherboard memory compatibility issue"],
+    "suggestions": ["Test with 2 RAM sticks only.", "Clear CMOS and retest.", "Reseat the RAM.", "Keep memory instability high if crashes continue only with 4 sticks."],
+    "priority": 87
+  },
+  {
+    "id": "rule_game_crash_general_gpu",
+    "conditions": {"symptoms": ["Game crash"], "gpu_present": true},
+    "likely_causes": ["Possible GPU instability", "Possible RAM instability", "Possible storage-related issue"],
+    "suggestions": ["Reseat the GPU.", "Check temperatures.", "Test reduced RAM population if applicable.", "Try another drive if the problem still points away from the GPU path."],
+    "priority": 81
+  },
+  {
+    "id": "rule_slow_perf_high_cpu_cooling",
+    "conditions": {"symptoms": ["Slow performance"], "cpu_tier": "High"},
+    "likely_causes": ["Possible thermal throttling", "Possible cooling issue"],
+    "suggestions": ["Check temperatures under load.", "Inspect cooler mounting and airflow.", "Confirm fans or pump are working correctly.", "Retest after correcting cooling if needed."],
+    "priority": 84
+  },
+  {
+    "id": "rule_slow_perf_gen5",
+    "conditions": {"symptoms": ["Slow performance"], "storage_type": "Gen 5"},
+    "likely_causes": ["Possible storage-related issue", "Possible motherboard storage path issue"],
+    "suggestions": ["Check whether performance changes with another drive.", "Try another supported slot if applicable.", "Keep storage path issues in mind if temperatures are normal.", "Compare behavior against a known-good drive if possible."],
+    "priority": 74
+  },
+  {
+    "id": "rule_overheating_high_cpu",
+    "conditions": {"symptoms": ["Overheating"], "cpu_tier": "High"},
+    "likely_causes": ["Likely cooling issue", "Possible CPU overheating"],
+    "suggestions": ["Inspect cooler mounting and thermal paste contact.", "Confirm fans or pump are operating correctly.", "Check case airflow.", "Retest temperatures after correcting cooling."],
+    "priority": 95
+  },
+  {
+    "id": "rule_overheating_general",
+    "conditions": {"symptoms": ["Overheating"]},
+    "likely_causes": ["Possible cooling issue", "Possible airflow issue"],
+    "suggestions": ["Inspect the cooler.", "Check fan operation.", "Check airflow through the case.", "Retest temperatures after adjustments."],
+    "priority": 82
+  },
+  {
+    "id": "rule_artifacting_riser",
+    "conditions": {"symptoms": ["Artifacting"], "gpu_present": true, "riser_cable": true},
+    "likely_causes": ["Likely riser cable issue", "Possible GPU issue", "Possible display path issue"],
+    "suggestions": ["Remove the riser and retest.", "Reseat the GPU.", "Try another display cable or monitor.", "Keep the riser high on the list if the issue clears."],
+    "priority": 98
+  },
+  {
+    "id": "rule_artifacting_gpu",
+    "conditions": {"symptoms": ["Artifacting"], "gpu_present": true},
+    "likely_causes": ["Likely GPU issue", "Possible display path issue"],
+    "suggestions": ["Reseat the GPU.", "Check GPU temperatures.", "Try another display cable or monitor.", "Test another GPU if needed."],
+    "priority": 84
+  },
+  {
+    "id": "rule_drive_not_detected_gen5",
+    "conditions": {"symptoms": ["Drive not detected"], "storage_type": "Gen 5"},
+    "likely_causes": ["Possible motherboard storage path issue", "Possible drive issue"],
+    "suggestions": ["Move the drive to another supported slot if applicable.", "Test the drive in another system if available.", "Test another drive in the same system.", "Keep the board storage path high on the list if the issue follows the slot."],
+    "priority": 95
+  },
+  {
+    "id": "rule_drive_not_detected_general",
+    "conditions": {"symptoms": ["Drive not detected"]},
+    "likely_causes": ["Possible drive issue", "Possible motherboard storage path issue"],
+    "suggestions": ["Reseat the drive.", "Test another drive.", "Try another supported slot if applicable.", "Check whether the issue follows the drive or the board."],
+    "priority": 82
+  },
+  {
+    "id": "rule_windows_install_issue_four_sticks",
+    "conditions": {"symptoms": ["Windows install issue"], "ram_modules": 4},
+    "likely_causes": ["Possible RAM instability", "Possible motherboard memory compatibility issue"],
+    "suggestions": ["Test with 2 RAM sticks only.", "Clear CMOS and retry the install.", "Reseat the RAM.", "Keep memory configuration high on the list if install failures improve with fewer sticks."],
+    "priority": 94
+  },
+  {
+    "id": "rule_windows_install_issue_gen5",
+    "conditions": {"symptoms": ["Windows install issue"], "storage_type": "Gen 5"},
+    "likely_causes": ["Possible storage-related issue", "Possible motherboard storage path issue"],
+    "suggestions": ["Try another SSD if available.", "Move the drive to another supported slot if applicable.", "Retry the install on a different drive if needed.", "Keep the storage path high on the list if the issue follows the drive or slot."],
+    "priority": 90
+  },
+  {
+    "id": "rule_windows_install_issue_general",
+    "conditions": {"symptoms": ["Windows install issue"]},
+    "likely_causes": ["Possible storage-related issue", "Possible RAM instability", "Possible motherboard issue"],
+    "suggestions": ["Start with RAM reduction and drive checks.", "Clear CMOS and retry.", "Use minimal hardware for the install.", "Keep the board in mind if both RAM and drive tests pass."],
     "priority": 80
   }
 ]
