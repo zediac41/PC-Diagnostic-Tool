@@ -1,0 +1,45 @@
+{
+  "case_id": "CASE-0001",
+  "date_created": "2026-03-25",
+  "csr": "Erik",
+  "customer_reference": "RMA-12345",
+  "system": {
+    "motherboard": "MSI B650 Tomahawk WiFi",
+    "cpu": "Ryzen 7 7800X3D",
+    "cooler": "360mm AIO",
+    "ram_total_gb": 32,
+    "ram_modules": 2,
+    "gpu_present": true,
+    "gpu_model": "RTX 4080 Super",
+    "riser_cable": true,
+    "storage": [
+      "2TB NVMe"
+    ]
+  },
+  "symptoms": [
+    "Freeze",
+    "No display"
+  ],
+  "symptom_details": {
+    "when_it_happens": "During gaming",
+    "frequency": "Intermittent",
+    "recent_changes": "New GPU installed",
+    "notes": "Monitor loses signal and requires reboot"
+  },
+  "troubleshooting_done": [
+    "Updated drivers",
+    "Reseated GPU",
+    "Checked temps"
+  ],
+  "suggested_causes": [
+    "Riser cable instability",
+    "GPU connection issue"
+  ],
+  "resolution": {
+    "resolved": true,
+    "probable_cause": "Faulty riser cable",
+    "confirmed_cause": "Riser cable instability under load",
+    "fix_performed": "Removed riser cable and mounted GPU directly",
+    "final_notes": "Stable after stress testing"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "symptoms": [
+    "BSOD",
+    "Freeze",
+    "Random shutdown",
+    "Restarting on its own",
+    "No display",
+    "No boot",
+    "No POST",
+    "Game crash",
+    "Slow performance",
+    "Overheating",
+    "Artifacting",
+    "Drive not detected",
+    "Windows install issue",
+    "USB/peripheral issue",
+    "Network issue",
+    "Audio issue"
+  ],
+  "troubleshooting_steps": [
+    "Reseated RAM",
+    "Tested one stick",
+    "Reseated GPU",
+    "Removed riser",
+    "Updated drivers",
+    "Checked temps",
+    "Swapped drive",
+    "Reinstalled Windows",
+    "Cleared CMOS",
+    "Tested another GPU",
+    "Tested another RAM kit",
+    "Updated chipset drivers",
+    "Checked power connections",
+    "Tested outside the case"
+  ]
+}
