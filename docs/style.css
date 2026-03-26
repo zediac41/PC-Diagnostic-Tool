@@ -23,7 +23,7 @@ body {
 }
 
 .board-log-panel {
-  width: min(900px, calc(100% - 32px));
+  width: min(1500px, calc(100% - 32px));
   margin: 16px auto 28px;
 }
 
