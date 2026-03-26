@@ -193,3 +193,12 @@ ul { margin: 0; padding-left: 18px; }
 .board-log-panel #boardLogStatus {
   margin-top: 12px;
 }
+
+
+.board-log-panel .form-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.board-log-panel textarea {
+  min-height: 138px;
+}
